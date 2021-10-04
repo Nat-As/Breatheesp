@@ -3,16 +3,16 @@ import adafruit_dotstar
 import board
 import feathers2
 
-def importWiFi():
-    try:
-        import ipaddress
-        import ssl
-        import wifi
-        import socketpool
-        import adafruit_requests
-    except ImportError:
-        print("Unable to locate WiFi Modules")
-        raise
+
+try:
+    import ipaddress
+    import ssl
+    import wifi
+    import socketpool
+    import adafruit_requests
+except ImportError:
+    print("Unable to locate WiFi Modules")
+    raise
 
 # Housekeeping items
 ############################################################
@@ -28,17 +28,17 @@ dotstar = adafruit_dotstar.DotStar(
 feathers2.led_set(True)
 # Create a colour wheel index int
 color_index = 0
+
+# Import Secret Wifi info from secrets.py
+try:
+    from secrets import secrets
+except ImportError:
+    print("Secrets file not found!")
+    raise
+
 ############################################################
 
 # Function Definitions
-def Setup():
-    # Import Secret Wifi info from secrets.py
-    try:
-        from secrets import secrets
-    except ImportError:
-        print("Secrets file not found!")
-        raise
-
 
 def GetMemSize():
     # Show available memory
@@ -56,11 +56,19 @@ def GetMemSize():
 
 
 # Main Code
-#importWiFi()
-Setup()
+#Find WiFi
+print("Searching for WiFi Networks")
+for network in wifi.radio.start_scanning_networks():
+    print("\t%s\t\tRSSI: %d\tChannel: %d" % (str(network.ssid, "utf-8"),
+            network.rssi, network.channel))
+wifi.radio.stop_scanning_networks()
+# Connect to WiFi
+wifi.radio.connect(secrets["ssid"], secrets["password"])
+print("Connected to %s!"%secrets["ssid"])
+print("My IP address is", wifi.radio.ipv4_address)
 
 
-# RGB Madness
+# Main Loop
 while True:
     # Get the R,G,B values of the next colour
     r, g, b = feathers2.dotstar_color_wheel(color_index)
