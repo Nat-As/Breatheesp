@@ -3,7 +3,7 @@ This is the uploaded Circuit Python Firmware for an IOT air quality sensor with 
 <BR>
   <BR>
     
-This Project is designed to create an air-quality sensor using the Feather S2 platform as a prototype. A later version will be created in C with custom hardware and software.
+This Project is designed to create an air-quality sensor using the Feather S2 platform as a prototype. A later version will be created in C with custom hardware and software. This code currently connects to the wifi in the secrets file (change it to yours before using) and gets an IP address from the router. All setup is done in order to use the requests module and immedietly begin making API requests.
   
 # Libraries
 Cool Adafruit Libraries [here](https://github.com/adafruit/Adafruit_CircuitPython_Bundle/releases/tag/20211003)
