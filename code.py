@@ -73,12 +73,17 @@ try:
     requests = adafruit_requests.Session(pool, ssl.create_default_context())
 
     ### Send JSON Data ###
-    payload = {'DeviceID': 'Sensor001',
+    header = {
+        'User-Agent': 'Mesh Sensor',
+        'Content-Type': 'application/json;charset=UTF-8'}
+
+    payload = {
+            'DeviceID': 'Sensor001',
             'Timestamp': time.time(),
             'Temp': '72',
             'Humid': '36'}
 
-    r = requests.post("http://192.168.10.116:6060", data=payload)
+    r = requests.post("http://192.168.10.116:6060", headers=header, data=payload)
     print(r.text)
 except Exception as e:
     print("Failed to send data")
