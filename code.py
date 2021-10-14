@@ -67,6 +67,22 @@ wifi.radio.connect(secrets["ssid"], secrets["password"])
 print("Connected to %s!"%secrets["ssid"])
 print("My IP address is", wifi.radio.ipv4_address)
 
+try:
+    # Set up network sockets
+    pool = socketpool.SocketPool(wifi.radio)
+    requests = adafruit_requests.Session(pool, ssl.create_default_context())
+
+    ### Send JSON Data ###
+    payload = {'DeviceID': 'Sensor001',
+            'Timestamp': time.time(),
+            'Temp': '72',
+            'Humid': '36'}
+
+    r = requests.post("http://192.168.10.116:6060", data=payload)
+    print(r.text)
+except Exception as e:
+    print("Failed to send data")
+    print(e)
 
 # Main Loop
 while True:
