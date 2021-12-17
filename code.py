@@ -26,8 +26,6 @@ dotstar = adafruit_dotstar.DotStar(
 
 # Turn on the internal blue LED
 feathers2.led_set(True)
-# Create a colour wheel index int
-color_index = 0
 
 # Import Secret Wifi info from secrets.py
 try:
@@ -35,7 +33,20 @@ try:
 except ImportError:
     print("Secrets file not found!")
     raise
-
+# Error codes
+def CONERR(e):
+    while True:
+        print(e) # Log Error to console
+        dotstar[0] = (255,0,0, 0.5) # RED
+        time.sleep(0.9)
+        # Retry Problematic function
+    
+def OFLERR(e):
+    while True:
+        print(e) # Log Error to console
+        dotstar[0] = (255,140,0, 0.5) # ORANGE
+        time.sleep(0.9)
+        # Retry Problematic function
 ############################################################
 
 # Function Definitions
@@ -57,52 +68,56 @@ def GetMemSize():
 
 # Main Code
 #Find WiFi
-print("Searching for WiFi Networks")
-for network in wifi.radio.start_scanning_networks():
-    print("\t%s\t\tRSSI: %d\tChannel: %d" % (str(network.ssid, "utf-8"),
-            network.rssi, network.channel))
-wifi.radio.stop_scanning_networks()
+def WiFiEnum(wifi):
+    print("Searching for WiFi Networks")
+    for network in wifi.radio.start_scanning_networks():
+        print("\t%s\t\tRSSI: %d\tChannel: %d" % (str(network.ssid, "utf-8"),
+                network.rssi, network.channel))
+    wifi.radio.stop_scanning_networks()
+WiFiEnum(wifi)
+
 # Connect to WiFi
-wifi.radio.connect(secrets["ssid"], secrets["password"])
-print("Connected to %s!"%secrets["ssid"])
-print("My IP address is", wifi.radio.ipv4_address)
+def WiFiCon(wifi):
+    try:
+        wifi.radio.connect(secrets["ssid"], secrets["password"])
+        print("Connected to %s!"%secrets["ssid"])
+        print("My IP address is", wifi.radio.ipv4_address)
+    except Exception as e:
+        CONERR(e)
+WiFiCon(wifi)
 
-try:
-    # Set up network sockets
-    pool = socketpool.SocketPool(wifi.radio)
-    requests = adafruit_requests.Session(pool, ssl.create_default_context())
+# Send Data
+def OffLoad(wifi):
+    try:
+        # Set up network sockets
+        pool = socketpool.SocketPool(wifi.radio)
+        requests = adafruit_requests.Session(pool, ssl.create_default_context())
 
-    ### Send JSON Data ###
-    header = {
-        'User-Agent': 'Mesh Sensor',
-        'Content-Type': 'application/json;charset=UTF-8'}
+        ### Send JSON Data ###
+        header = {
+            'User-Agent': 'Mesh Sensor',
+            'Content-Type': 'application/json;charset=UTF-8'}
 
-    payload = {
-            'DeviceID': 'Sensor001',
-            'Timestamp': time.time(),
-            'Temp': '72',
-            'Humid': '36'}
+        payload = {
+                'DeviceID': 'Sensor001',
+                'Timestamp': time.time(),
+                'Temp': '72',
+                'Humid': '36'}
 
-    r = requests.post("http://192.168.10.116:6060", headers=header, data=payload)
-    print(r.text)
-except Exception as e:
-    print("Failed to send data")
-    print(e)
+        #r = requests.post("http://192.168.10.116:6060", headers=header, data=payload)
+        print(header,payload)
+        #print(random.randrange(70,90,1))
+    except Exception as e:
+        OFLERR(e)
+OffLoad(wifi)
 
 # Main Loop
 while True:
-    # Get the R,G,B values of the next colour
-    r, g, b = feathers2.dotstar_color_wheel(color_index)
-    # Set the colour on the dotstar
-    dotstar[0] = (r, g, b, 0.5)
-    # Increase the wheel index
-    color_index += 1
-
-    # If the index == 255, loop it
-    if color_index == 255:
-        color_index = 0
-        # Invert the internal LED state every half colour cycle
-        feathers2.led_blink()
-
+    dotstar[0] = (0, 255, 0, 0.1) # Green
+    feathers2.led_blink()#Blink Blue LED
     # Sleep for 1s reduces console traffic
-    time.sleep(0.1)
+    time.sleep(0.9)
+
+
+
+    
