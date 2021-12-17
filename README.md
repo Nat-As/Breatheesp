@@ -1,5 +1,5 @@
 # Breatheesp
-This is the uploaded Circuit Python Firmware for an IOT air quality sensor with the UM Feather S2 development board. Currently this project is using Circuit Python V6.3.0 with the ESP32-S2 as a proof-of-concept (POC). This code can eventually be ported to Circuit Python 7.X.X, but plans are currently being made to port this to a C code instead.
+This is the uploaded Circuit Python Firmware for an IOT air quality sensor with the [UM Feather S2](https://feathers2.io/) development board. Currently this project is using Circuit Python V6.3.0 with the ESP32-S2 as a proof-of-concept (POC). This code can eventually be ported to Circuit Python 7.X.X, but plans are currently being made to port this to a C code instead.
 <BR>
   <BR>
     
