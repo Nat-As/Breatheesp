@@ -14,6 +14,9 @@ except ImportError:
     print("Unable to locate WiFi Modules")
     raise
 
+# Configuration
+server = "http://192.168.86.4:3000/api/reading"
+
 # Housekeeping items
 ############################################################
 # Make sure the 2nd LDO is turned on
@@ -40,7 +43,7 @@ def CONERR(e):
         dotstar[0] = (255,0,0, 0.5) # RED
         time.sleep(0.9)
         # Retry Problematic function
-    
+
 def OFLERR(e):
     while True:
         print(e) # Log Error to console
@@ -67,6 +70,8 @@ def GetMemSize():
 
 
 # Main Code
+
+
 #Find WiFi
 def WiFiEnum(wifi):
     print("Searching for WiFi Networks")
@@ -87,7 +92,7 @@ def WiFiCon(wifi):
 WiFiCon(wifi)
 
 # Send Data
-def OffLoad(wifi):
+def OffLoad(wifi,temp,humid):
     try:
         # Set up network sockets
         pool = socketpool.SocketPool(wifi.radio)
@@ -101,23 +106,27 @@ def OffLoad(wifi):
         payload = {
                 'DeviceID': 'Sensor001',
                 'Timestamp': time.time(),
-                'Temp': '72',
-                'Humid': '36'}
+                'Temp': temp,
+                'Humid': humid}
 
-        #r = requests.post("http://192.168.10.116:6060", headers=header, data=payload)
+        r = requests.post(server, headers=header, data=payload)
         print(header,payload)
-        #print(random.randrange(70,90,1))
     except Exception as e:
         OFLERR(e)
-OffLoad(wifi)
+
+# Generate Fake Data
+def DataGen(wifi):
+    temp = time.time()%22 + 60
+    humid  = time.time()%30 + 50
+    # Upload Fake Data to server
+    OffLoad(wifi,temp,humid)
+DataGen(wifi)
 
 # Main Loop
 while True:
     dotstar[0] = (0, 255, 0, 0.1) # Green
     feathers2.led_blink()#Blink Blue LED
     # Sleep for 1s reduces console traffic
-    time.sleep(0.9)
+    time.sleep(1.3)
 
 
-
-    
