@@ -15,18 +15,16 @@ except ImportError:
     raise
 
 # Configuration
-server = "http://192.168.86.4:3000/api/reading"
+server = "http://www.github.com/Nat-As"
 
 # Housekeeping items
 ############################################################
 # Make sure the 2nd LDO is turned on
 feathers2.enable_LDO2(True)
-
-# Create a DotStar instance
 dotstar = adafruit_dotstar.DotStar(
     board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.5, auto_write=True
 )
-
+dotstar[0] = (255, 0, 127, 0.1) # Purple - Boot up
 # Turn on the internal blue LED
 feathers2.led_set(True)
 
@@ -128,5 +126,3 @@ while True:
     feathers2.led_blink()#Blink Blue LED
     # Sleep for 1s reduces console traffic
     time.sleep(1.3)
-
-
