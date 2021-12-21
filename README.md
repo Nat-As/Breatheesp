@@ -23,3 +23,12 @@ Example format:
 Cool Adafruit Libraries [here](https://github.com/adafruit/Adafruit_CircuitPython_Bundle/releases/tag/20211003)
 # Examples
 Some great [examples](https://learn.adafruit.com/adafruit-metro-esp32-s2/circuitpython-internet-test)
+# Troubleshooting
+  The device has an onboard RGB led that can have different colors which correspond to different meanings. A table of these colors and theor meanings is shown below.
+  |Color|Meaning|
+  |-----|-------|
+  |Magenta|Device is booting|
+  |Red|Failed to connect to WiFi|
+  |Orange|Failed to send data|
+  |Green|All systems go|
+  
