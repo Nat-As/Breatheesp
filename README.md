@@ -27,7 +27,7 @@ Some great [examples](https://learn.adafruit.com/adafruit-metro-esp32-s2/circuit
   The device has an onboard RGB led that can have different colors which correspond to different meanings. A table of these colors and their meanings is shown below.
   |Color|Meaning|
   |-----|-------|
-  |Magenta|Device is booting|
+  |White|Device is booting|
   |Red|Failed to connect to WiFi|
   |Orange|Failed to send data|
   |Green|All systems go|
