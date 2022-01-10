@@ -19,6 +19,22 @@ Example format:
                 'Humid': '36'}
   ```
   
+# Usage
+  ### Setup
+  The feather board should have red LED if it cannot connect to the WiFi after turning on. To connect to WiFi, the ```secrets.py``` file must be changed with relevant WiFi information. This includes the Wifi SSID, (The name of the network), and the password, (The password to the network). These are the first two fields in the ```secrets.py``` file as shown below:
+  ```
+  secrets = {
+    'ssid' : '[YourWifiNameHere]',
+    'password' : 'password123',
+  ```
+  ### Server Connection
+  Once the device connects to WiFi, the led may turn orange if the server is unreachable. To specify a server to make a post request to, edit the ```server``` varable in the ```code.py``` script. (As shown below)
+  ```
+  # Configuration
+server = "http://www.github.com/Nat-As"
+  ```
+The example above will send the sensors data to the address: ```http://www.github.com/Nat-As```. This will ideally be changed to the server address of the database.
+  
 # Libraries
 Cool Adafruit Libraries [here](https://github.com/adafruit/Adafruit_CircuitPython_Bundle/releases/tag/20211003)
 # Examples
