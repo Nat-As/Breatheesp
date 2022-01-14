@@ -15,7 +15,12 @@ except ImportError:
     raise
 
 # Configuration
-server = "http://www.github.com/Nat-As"
+sensorId = "001"
+configsRoute = "http://localhost:3000/api/config"
+readingsRoute = "http://localhost:3000/api/reading"
+
+
+
 
 # Housekeeping items
 ############################################################
@@ -101,13 +106,12 @@ def OffLoad(wifi,temp,humid):
             'User-Agent': 'Mesh Sensor',
             'Content-Type': 'application/json;charset=UTF-8'}
 
-        payload = {
-                'DeviceID': 'Sensor001',
-                'Timestamp': time.time(),
-                'Temp': temp,
-                'Humid': humid}
-
-        r = requests.post(server, headers=header, data=payload)
+        payload = { 
+                'sensor_ID': sensorId,
+                'timestamp': time.time(), 
+                'temperature': temp,
+                'humidity': humid}
+        r = requests.post(readingsRoute, headers=header, data=payload)
         print(header,payload)
     except Exception as e:
         OFLERR(e)
@@ -126,3 +130,9 @@ while True:
     feathers2.led_blink()#Blink Blue LED
     # Sleep for 1s reduces console traffic
     time.sleep(1.3)
+
+
+#Main questions are:
+#1) How to allow the webserver to send configurations and have sensor receive it
+#2) How to set an ID that is consistent with a specific sensor and their IP
+#3) How to deal with the problem of an IP changing with the sensor (PUT requests)
