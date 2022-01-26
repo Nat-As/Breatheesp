@@ -4,6 +4,7 @@ import board
 import feathers2
 
 
+
 try:
     import ipaddress
     import ssl
@@ -15,7 +16,12 @@ except ImportError:
     raise
 
 # Configuration
-server = "http://www.github.com/Nat-As"
+sensorId = "001"
+configsRoute = "http://192.168.8.4:3000/api/config"
+readingsRoute = "http://192.168.8.4:3000/api/reading"
+
+
+
 
 # Housekeeping items
 ############################################################
@@ -99,16 +105,14 @@ def OffLoad(wifi,temp,humid):
         ### Send JSON Data ###
         header = {
             'User-Agent': 'Mesh Sensor',
-            'Content-Type': 'application/json;charset=UTF-8'}
+            'Content-Type': 'application/json'}
 
-        payload = {
-                'DeviceID': 'Sensor001',
-                'Timestamp': time.time(),
-                'Temp': temp,
-                'Humid': humid}
-
-        r = requests.post(server, headers=header, data=payload)
-        print(header,payload)
+        payload = { 
+                'sensor_ID': str(sensorId), #make sure that it's all strings. 
+                'temperature': str(temp),
+                'humidity': str(humid)}
+        response = requests.post(readingsRoute, headers=header, json=payload) #sends a post request
+        print('request sent')
     except Exception as e:
         OFLERR(e)
 
@@ -126,3 +130,8 @@ while True:
     feathers2.led_blink()#Blink Blue LED
     # Sleep for 1s reduces console traffic
     time.sleep(1.3)
+
+#circuitpython for vs code: F1 menu -> select board -> select serial port -> open serial monitor. 
+#A question is:
+#1) How do we allow the webserver to send configuration HTTP requests and have the sensor receive it? 
+# We may do this if we can set an ID that is or makes itself consistent with a specific sensor and their IP
