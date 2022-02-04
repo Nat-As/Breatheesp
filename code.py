@@ -2,7 +2,9 @@ import time, gc, os
 import adafruit_dotstar
 import board
 import feathers2
-
+import adafruit_scd4x
+import busio
+from adafruit_pm25.i2c import PM25_I2C
 
 
 try:
@@ -33,6 +35,12 @@ dotstar = adafruit_dotstar.DotStar(
 dotstar[0] = (255, 0, 127, 0.1) # Purple - Boot up
 # Turn on the internal blue LED
 feathers2.led_set(True)
+# For Sensors
+i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
+scd = adafruit_scd4x.SCD4X(i2c)
+scd.start_periodic_measurement()
+reset_pin = None
+pm25 = PM25_I2C(i2c, reset_pin)
 
 # Import Secret Wifi info from secrets.py
 try:
