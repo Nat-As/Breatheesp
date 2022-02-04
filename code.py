@@ -119,7 +119,7 @@ def OffLoad(wifi,temp,humid,PM):
                 'sensor_ID': str(sensorId), #make sure that it's all strings. 
                 'temperature': str(temp),
                 'humidity': str(humid),
-                'PM0.3': str(PM)}
+                'PM_03': str(PM)}
         response = requests.post(readingsRoute, headers=header, json=payload) #sends a post request
         print('request sent')
     except Exception as e:
