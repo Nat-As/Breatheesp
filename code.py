@@ -104,7 +104,7 @@ def WiFiCon(wifi):
 WiFiCon(wifi)
 
 # Send Data
-def OffLoad(wifi,temp,humid):
+def OffLoad(wifi,temp,humid,PM):
     try:
         # Set up network sockets
         pool = socketpool.SocketPool(wifi.radio)
@@ -118,18 +118,24 @@ def OffLoad(wifi,temp,humid):
         payload = { 
                 'sensor_ID': str(sensorId), #make sure that it's all strings. 
                 'temperature': str(temp),
-                'humidity': str(humid)}
+                'humidity': str(humid),
+                'PM0.3': str(PM)}
         response = requests.post(readingsRoute, headers=header, json=payload) #sends a post request
         print('request sent')
     except Exception as e:
         OFLERR(e)
 
-# Generate Fake Data
+# Gather AQ Data
 def DataGen(wifi):
-    temp = time.time()%22 + 60
-    humid  = time.time()%30 + 50
-    # Upload Fake Data to server
-    OffLoad(wifi,temp,humid)
+    aqdata = pm25.read()
+    if scd.data_ready:
+        temp = (scd.temperature * 9/5) + 32
+        humid  = scd.relative_humidity
+        PM3UM = aqdata["particles 03um"] #0.3 micron particles
+        PM5UM = aqdata["particles 05um"] #0.5 micron particles
+        PM50M = aqdata["particles 50um"] # 5 micron particles
+        # Upload Data to server
+        OffLoad(wifi,temp,humid,PM3UM)
 DataGen(wifi)
 
 # Main Loop
