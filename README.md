@@ -39,7 +39,7 @@ The example above will send the sensors data to the address: ```http://www.githu
 + [Feather S2](https://www.adafruit.com/product/4769)
 + [Particulate Matter (PM) Sensor](https://www.adafruit.com/product/4632)
 + [CO2 / Temp / Humidity Sensor](https://www.adafruit.com/product/5190)
-  
+
 # Libraries
 Cool Adafruit Libraries [here](https://github.com/adafruit/Adafruit_CircuitPython_Bundle/releases/tag/20211003)
 # Examples
@@ -52,4 +52,9 @@ Some great [examples](https://learn.adafruit.com/adafruit-metro-esp32-s2/circuit
   |Red|Failed to connect to WiFi|
   |Orange|Failed to send data|
   |Green|All systems go|
+  
+# Device
+<BR>
+<img src="AQS.jpg" alt="AQS" width="500"/>
+<BR>
   
