@@ -52,6 +52,7 @@ Some great [examples](https://learn.adafruit.com/adafruit-metro-esp32-s2/circuit
   |Red|Failed to connect to WiFi|
   |Orange|Failed to send data|
   |Green|All systems go|
+  |Rainbow|Default Firmware|
   
 # Device
 <BR>
